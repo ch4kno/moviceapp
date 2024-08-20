@@ -1,0 +1,188 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter',
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+      ),
+      home: HomeScreen(),
+    );
+  }
+}
+
+class GridViewExample extends StatelessWidget {
+  const GridViewExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Movie APP'),
+      ),
+      body: GridView.builder(
+        itemCount: 50,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:
+              mediaQuery.orientation == Orientation.portrait ? 2 : 4,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            color: Colors.blueGrey,
+            child: Center(
+              child: Text(
+                '$index',
+                style: const TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+//main app
+
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
+
+  final List lastMoive = [
+    'https://resizing.flixster.com/1BLUnSuUK_dXry4SAy3ftjam63E=/206x305/v2/https://resizing.flixster.com/_3auZfilUqYm0D5ahozuLUmwTc4=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzIxNWM1ZmNmLTlmZmMtNDU1ZC05MTQ4LTdlODA2OGMwYzgyMC5qcGc=',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTcxg1LIBOP8aQtyNbhw9nfvOSHr1IOMmKQQ&s',
+    'https://www.bluedogposters.com.au/cdn/shop/products/PP34925_1400x.jpg?v=1674016516',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxa_zf2lCiO126Fu-bRVU-u4Vj41tJ8IquYg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS71Tr4Fx-4ovgyP5w6XkBZbZBNv7hA_Zr0Yg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW61jZNvVyLIo-60are90CrjSwg3ACNO8BUQ&s',
+    'https://www.popular.com.kh/wp-content/uploads/2024/07/449036353_7985940341472983_4666365777735643478_n.jpg',
+    'https://static0.colliderimages.com/wordpress/wp-content/uploads/2023/08/kraven-the-hunter-new-film-poster.jpg',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'VET.MOVIE',
+          style: TextStyle(
+              color: Colors.red, fontWeight: FontWeight.bold, fontSize: 25),
+        ),
+        actions: const [
+          CircleAvatar(
+            backgroundImage: NetworkImage(
+                'https://i.scdn.co/image/ab6761610000e5eb5fe9a5af0233790d764583dd'),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              RowTitle(title: 'Recommended For You', subtitle: 'See All',),
+              const SizedBox(
+                height: 12,
+              ),
+              MovieReusableWidget(lastMoive: lastMoive),
+              RowTitle(title: 'Best Movie of the year', subtitle: 'See All',),
+              const SizedBox(
+                height: 12,
+              ),
+              MovieReusableWidget(lastMoive: lastMoive),
+              RowTitle(title: 'popular movie ', subtitle: 'See All',),
+              const SizedBox(
+                height: 12,
+              ),
+              MovieReusableWidget(lastMoive: lastMoive),
+              RowTitle(title: 'funny movie', subtitle: 'See All',),
+              const SizedBox(
+                height: 12,
+              ),
+              MovieReusableWidget(lastMoive: lastMoive),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RowTitle extends StatelessWidget {
+  RowTitle({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+  }):super(key : key);
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+        ),
+        InkWell(
+          onTap: () {
+            print('See All');
+          },
+          child: Text(
+            subtitle,
+            style: const TextStyle(
+                color: Colors.deepPurple,
+                fontWeight: FontWeight.bold,
+                fontSize: 17),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MovieReusableWidget extends StatelessWidget {
+  const MovieReusableWidget({
+    super.key,
+    required this.lastMoive,
+  });
+
+  final List lastMoive;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 270,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: lastMoive.length,
+        itemBuilder: (context, index) {
+          return Container(
+            padding: EdgeInsets.only(right: 12),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                lastMoive[index],
+                fit: BoxFit.cover,
+                height: 200,
+                width: 180,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
